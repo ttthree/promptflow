@@ -45,7 +45,9 @@ def create_faiss_index(pdf_path: str) -> str:
         log(f"Number of segments: {len(segments)}")
 
         index = FAISSIndex(index=faiss.IndexFlatL2(1536), embedding=OAIEmbedding())
-        index.insert_batch(segments)
+
+        # Update index with metadaba being the page ids starting 0
+        index.insert_batch(segments, metadatas=[i for i in range(len(segments))])
 
         index.save(index_persistent_path)
 
