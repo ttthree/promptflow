@@ -9,8 +9,10 @@ from utils.index import FAISSIndex
 from utils.logging import log
 from utils.lock import acquire_lock
 from constants import INDEX_DIR
+from promptflow.tracing import trace
 
 
+@trace
 def create_faiss_index(pdf_path: str) -> str:
     chunk_size = int(os.environ.get("CHUNK_SIZE"))
     chunk_overlap = int(os.environ.get("CHUNK_OVERLAP"))

@@ -10,6 +10,8 @@ It's a console application that you start with a URL to a PDF file as argument. 
 ## Get started
 ### Create .env file in this folder with below content
 ```
+OPENAI_API_TYPE=azure
+OPENAI_API_VERSION=2023-12-01-preview
 OPENAI_API_BASE=<AOAI_endpoint>
 OPENAI_API_KEY=<AOAI_key>
 EMBEDDING_MODEL_DEPLOYMENT_NAME=text-embedding-ada-002

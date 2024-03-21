@@ -2,8 +2,10 @@ from jinja2 import Environment, FileSystemLoader
 import os
 from utils.logging import log
 from utils.oai import OAIChat, render_with_token_limit
+from promptflow.tracing import trace
 
 
+@trace
 def rewrite_question(question: str, history: list):
     template = Environment(
         loader=FileSystemLoader(os.path.dirname(os.path.abspath(__file__)))

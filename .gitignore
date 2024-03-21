@@ -184,8 +184,8 @@ scripts/docs/_build/
 config.json
 
 # chat-with-pdf's prebuilt index
-!.pdfs/
-!.index/
+.pdfs/
+.index/
 
 # Poetry
 poetry.lock

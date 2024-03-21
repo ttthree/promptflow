@@ -10,7 +10,9 @@ from download import download
 from utils.lock import acquire_lock
 from constants import PDF_DIR, INDEX_DIR
 
+from promptflow.tracing import trace, start_trace
 
+@trace
 def chat_with_pdf(question: str, pdf_url: str, history: list):
     with acquire_lock("create_folder.lock"):
         if not os.path.exists(PDF_DIR):
@@ -36,7 +38,7 @@ def print_stream_and_return_full_answer(stream):
 
     return answer
 
-
+@trace
 def main_loop(url: str):
     load_dotenv(os.path.join(os.path.dirname(__file__), ".env"), override=True)
 
@@ -60,6 +62,8 @@ def main():
     parser = argparse.ArgumentParser(description="Ask questions about a PDF file")
     parser.add_argument("url", help="URL to the PDF file")
     args = parser.parse_args()
+
+    start_trace()
 
     main_loop(args.url)
 

@@ -5,9 +5,11 @@ import re
 from utils.lock import acquire_lock
 from utils.logging import log
 from constants import PDF_DIR
+from promptflow.tracing import trace
 
 
 # Download a pdf file from a url and return the path to the file
+@trace
 def download(url: str) -> str:
     path = os.path.join(PDF_DIR, normalize_filename(url) + ".pdf")
     lock_path = path + ".lock"

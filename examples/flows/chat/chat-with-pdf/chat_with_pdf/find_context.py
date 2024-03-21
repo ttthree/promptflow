@@ -5,8 +5,10 @@ import os
 from utils.index import FAISSIndex
 from utils.oai import OAIEmbedding, render_with_token_limit
 from utils.logging import log
+from promptflow.tracing import trace
 
 
+@trace
 def find_context(question: str, index_path: str):
     index = FAISSIndex(index=faiss.IndexFlatL2(1536), embedding=OAIEmbedding())
     index.load(path=index_path)
