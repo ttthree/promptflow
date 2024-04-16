@@ -41,6 +41,7 @@ When you answer the question, don't explicitly call out that it's based on the c
 ### context #{{loop.index0+1}}
 #### URL: {{item['URL']}}
 #### Content:
+{{item['snippet']}}
 {{item['content']}}
 
 {% endfor %}

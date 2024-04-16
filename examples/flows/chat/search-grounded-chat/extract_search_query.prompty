@@ -88,6 +88,7 @@ Your answer:
 Context:
 {% for item in context %}
 ## context #{{loop.index0+1}}
+{{item['snippet']}}
 {{item['content']}}
 
 {% endfor %}
