@@ -4,8 +4,10 @@ from promptflow.core import Flow
 from search import search
 from dotenv import load_dotenv
 
+load_dotenv(override=True)
+
 @trace
-def chat(question: str, history: list):
+def chat(question: str, history: list=[]):
     max_search_rounds = int(os.environ.get('MAX_ROUND_OF_SEARCH'))
     extract = Flow.load('extract_search_query.prompty')
     answer = Flow.load('answer_question.prompty')
@@ -23,7 +25,7 @@ def chat(question: str, history: list):
 
     result = answer(question=question, context=context, history=history)
 
-    return result
+    return {"output": result}
     
 if __name__ == '__main__':
     load_dotenv(override=True)
@@ -38,8 +40,8 @@ if __name__ == '__main__':
         answer = chat(question, history)
 
         print("\033[92m" + "$Bot: " + "\033[0m", end=" ", flush=True)
-        print(answer)
+        print(answer["output"])
         print(flush=True)
 
         history.append({"role":"user", "content": question})
-        history.append({"role":"assistant", "content": answer})
+        history.append({"role":"assistant", "content": answer["output"]})
