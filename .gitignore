@@ -192,3 +192,5 @@ poetry.lock
 # promptflow subpackages __init__
 src/promptflow-*/promptflow/__init__.py
 .DS_Store
+
+.chainlit
