@@ -9,7 +9,7 @@ model:
         api_key: ${env:OPENAI_API_KEY}
         azure_endpoint: ${env:AZURE_OPENAI_ENDPOINT}
     parameters:
-        max_tokens: 10
+        max_tokens: 128
         temperature: 0.2
         response_format:
             type: json_object
@@ -24,14 +24,16 @@ sample: correctness_sample.json
 
 ---
 # system:
-You're an assistant that judge whether an answer is correct based on given question and ground truth. If it's correct return score 1 otherwise return score 0.
+You're an assistant that judge whether an answer is correct based on given question and ground truth. Ground truth describes the right answer and potentially what is correct/incorrect answer. If it's correct return score 1 otherwise return score 0. And if the score is 0 (incorrect) you should provide a reason.
 You always reply with valid JSON string looks like:
 {
-    "score": 1
+    "score": 1,
+    "reason": ""
 }
 for correct and
 {
-    "score": 0
+    "score": 0,
+    "reason": "The image generation model from OpenAI is DALLE, not Stable Diffusion"
 }
 for incorrect.
 
