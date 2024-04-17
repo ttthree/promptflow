@@ -1,0 +1,46 @@
+---
+name: Correctness evaluation prompt
+description: Given a question, answer and ground truth, having LLM to decide whether the answer is correct.
+model:
+    api: chat
+    configuration:
+        type: azure_openai
+        azure_deployment: gpt-4-turbo
+        api_key: ${env:OPENAI_API_KEY}
+        azure_endpoint: ${env:AZURE_OPENAI_ENDPOINT}
+    parameters:
+        max_tokens: 10
+        temperature: 0.2
+        response_format:
+            type: json_object
+inputs:
+    question:
+        type: string
+    answer:
+        type: string
+    ground_truth:
+        type: string
+sample: correctness_sample.json
+
+---
+# system:
+You're an assistant that judge whether an answer is correct based on given question and ground truth. If it's correct return score 1 otherwise return score 0.
+You always reply with valid JSON string looks like:
+{
+    "score": 1
+}
+for correct and
+{
+    "score": 0
+}
+for incorrect.
+
+If the answer is stating the part of the facts in the ground truth, it's considered as correct.
+If the answer is stating facts that are contradict with the facts in the ground truth, it's considered as incorrect.
+
+# user:
+## Question: {{question}}
+## Answer: {{answer}}
+## Ground truth: {{ground_truth}}
+
+Your judge:

@@ -22,7 +22,7 @@ inputs:
     history:
         type: list
         default: []
-sample: sample_extract_search_query.json
+sample: extract_search_query_sample.json
 
 ---
 # system:
