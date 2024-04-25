@@ -4,6 +4,7 @@ import os
 from promptflow.tracing import trace, start_trace
 from promptflow.core import Flow
 from search import search
+from dotenv import load_dotenv
 
 history = []
 
@@ -15,7 +16,8 @@ async def search_and_browse(question, history, max_search_rounds) -> list:
     context = []
     round = 0
     need_search = True
-    extract = Flow.load('extract_search_query.prompty')
+    model_provider = os.environ.get('MODEL_PROVIDER')
+    extract = Flow.load(f'extract_search_query_{model_provider}.prompty')
     while round < max_search_rounds and need_search:
         round += 1
         query = await cl.make_async(extract)(question=question, context=context, history=history)
@@ -30,7 +32,8 @@ async def search_and_browse(question, history, max_search_rounds) -> list:
 @trace
 @cl.step
 async def chat(question: str, history: list, context: list):
-    answer = Flow.load('answer_question.prompty')
+    model_provider = os.environ.get('MODEL_PROVIDER')
+    answer = Flow.load(f'answer_question_{model_provider}.prompty')
     result = await cl.make_async(answer)(question=question, context=context, history=history)
     return result
 
@@ -46,6 +49,7 @@ async def main(message: cl.Message):
     Returns:
         None.
     """
+    load_dotenv(override=True)
     max_search_rounds = int(os.environ.get('MAX_ROUND_OF_SEARCH'))
 
     question = message.content

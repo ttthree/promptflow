@@ -1,0 +1,50 @@
+---
+name: Question answering prompt
+description: Answer a user question based on context and chat history.
+model:
+    api: chat
+    configuration:
+        type: openai
+        api_key: ${env:MOONSHOT_API_KEY}
+        base_url: https://api.moonshot.cn/v1
+        model: moonshot-v1-128k
+    parameters:
+        max_tokens: 1024
+        temperature: 0.2
+        response_format:
+            type: text
+inputs:
+    question:
+        type: string
+    context:
+        type: list
+        default: []
+    history:
+        type: list
+        default: []
+sample: sample_extract_search_query.json
+
+---
+# system:
+You're an assistant that can answer question based on the provided context or your own knowledge. When there is answer can be derived from the context always prefer using the context. In your answer please also add reference link from the context when applicable, in markdown format.
+
+When you answer the question, don't explicitly call out that it's based on the context provided.
+
+{% for item in history %}
+# {{item.role}}:
+{{item.content}}
+{% endfor %}
+
+# user:
+## Context:
+{% for item in context %}
+### context #{{loop.index0+1}}
+#### URL: {{item['URL']}}
+#### Content:
+{{item['snippet']}}
+{{item['content']}}
+
+{% endfor %}
+Question: {{question}}
+
+Your answer:

@@ -1,0 +1,24 @@
+GET https://api.moonshot.cn/v1/models
+Authorization: Bearer {{MOONSHOT_API_KEY}}
+
+POST https://api.minimax.chat/v1/text/chatcompletion_v2
+Content-Type: application/json
+Authorization: Bearer {{MINIMAX_API_KEY}}
+{
+    "model": "abab6-chat",
+    "messages": [
+      {
+        "role": "system",
+        "content": "MM智能助理是一款由MiniMax自研的，没有调用其他产品的接口的大型语言模型。MiniMax是一家中国科技公司，一直致力于进行大模型相关的研究。"
+      },
+      {
+        "role": "user",
+        "content": "你会按照以下要求回复我的内容：“根据我给出的多段信息分别判断信息文本内容表达了哪类情绪，并给出判断的理由，判断理由务必精简、准确。”我的内容是：“1、学习三星堆正确拍照姿势，留下难忘回忆！2、太可爱啦！换了个小猫图标！3、当代社畜分类图鉴，你是哪种？”"
+      }
+    ],
+    "tool_choice": "none",
+    "stream": false,
+    "max_tokens": 128,
+    "temperature": 0.1,
+    "top_p": 0.9
+  }

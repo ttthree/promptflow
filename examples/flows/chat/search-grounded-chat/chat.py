@@ -4,13 +4,14 @@ from promptflow.core import Flow
 from search import search
 from dotenv import load_dotenv
 
-load_dotenv(override=True)
-
 @trace
 def chat(question: str, history: list=[]):
     max_search_rounds = int(os.environ.get('MAX_ROUND_OF_SEARCH'))
-    extract = Flow.load('extract_search_query.prompty')
-    answer = Flow.load('answer_question.prompty')
+    model_provider = os.environ.get('MODEL_PROVIDER')
+    extract = Flow.load(f'extract_search_query_{model_provider}.prompty')
+    answer = Flow.load(f'answer_question_{model_provider}.prompty')
+
+    print(f"Using model provider: {model_provider}")
 
     round = 0
     need_search = True
