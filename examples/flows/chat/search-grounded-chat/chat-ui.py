@@ -2,7 +2,7 @@ import chainlit as cl
 
 import os
 from promptflow.tracing import trace, start_trace
-from promptflow.core import Flow
+from promptflow.core import Flow, AsyncFlow
 from search import search
 from dotenv import load_dotenv
 
@@ -33,7 +33,7 @@ async def search_and_browse(question, history, max_search_rounds) -> list:
 @cl.step
 async def chat(question: str, history: list, context: list):
     model_provider = os.environ.get('MODEL_PROVIDER')
-    answer = Flow.load(f'answer_question_{model_provider}.prompty')
+    answer = AsyncFlow.load(f'answer_question_{model_provider}.prompty')
     result = await cl.make_async(answer)(question=question, context=context, history=history)
     return result
 
@@ -58,8 +58,14 @@ async def main(message: cl.Message):
 
     result = await chat(question=question, history=history, context=context)
 
+    msg = cl.Message(content="")
+    await msg.send()
+
+    for part in result:
+        await msg.stream_token(part)
+
     history.append({"role":"user", "content": question})
     history.append({"role":"assistant", "content": result})
 
     # Send the final answer.
-    await cl.Message(content=result).send()
+    await msg.update()

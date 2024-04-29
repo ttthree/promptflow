@@ -5,16 +5,15 @@ model:
     api: chat
     configuration:
         type: openai
-        api_key: ${env:TOGETHER_AI_API_KEY}
-        base_url: https://api.together.xyz/v1
-        model: mistralai/MIXTRAL-8X22B-INSTRUCT-V0.1
+        api_key: not_needed
+        base_url: http://localhost:11434/v1
+        model: phi3
     parameters:
         max_tokens: 1024
         temperature: 0.2
         response_format:
-            type: json_object
-        tool_choice: none
-        tools: []
+            type: text
+        stream: true
 inputs:
     question:
         type: string
@@ -29,15 +28,8 @@ sample: sample_extract_search_query.json
 ---
 # system:
 You're an assistant that can answer question based on the provided context or your own knowledge. When there is answer can be derived from the context always prefer using the context. In your answer please also add reference link from the context when applicable, in markdown format.
+
 When you answer the question, don't explicitly call out that it's based on the context provided.
-The answer should be in valid JSON format:
-{
-    "answer": "<your answer>"
-    "reference": [
-        {"title": "<title of the page>", "url": "<url of the page>"},
-        {"title": "<title of the page>", "url": "<url of the page>"}
-    ]
-}
 
 {% for item in history %}
 # {{item.role}}:
